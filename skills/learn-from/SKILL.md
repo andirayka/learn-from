@@ -1,6 +1,6 @@
 ---
 name: learn-from
-description: Turns a YouTube transcript, book, or article into study material with simple visuals. Detects the source type; transcripts and books get Explanation or Summary mode (Summary is Heavy or Light), articles get Heavy Summary or Light Summary. Asks for the mode if unspecified. Use when the user attaches or links a transcript, book, or article to learn from, or says "summarize this", "explain this", or "help me learn this".
+description: Turns a YouTube transcript, book, or article into study material with simple visuals. Detects the source type; transcripts and books get Explanation or Summary mode (Summary is Heavy or Light), articles get Heavy Summary or Light Summary. Transcripts and books default to Explanation; articles ask which summary mode. Use when the user attaches or links a transcript, book, or article to learn from, or says "summarize this", "explain this", or "help me learn this".
 ---
 
 # Learn From
@@ -28,11 +28,9 @@ For a YouTube link with no transcript attached, try to fetch the captions (for e
 | Article | Heavy Summary, Light Summary |
 | YouTube transcript, Book | **Explanation**, or **Summary** (Heavy Summary or Light Summary) |
 
-The user's words win: "explain", "teach me" mean Explanation; "summarize", "TL;DR" mean Summary; "heavy" or "light" name the summary mode.
+Transcript or book: **Explanation is the default.** Unless the user asks for a summary ("summarize", "TL;DR", "heavy", "light", "short version"), explain the source in full, without squeezing it, and do not ask. If they ask for a summary but do not say heavy or light, ask with `ask_user_choice` (options: Heavy Summary, Light Summary).
 
-If the mode is not clear, ask before writing anything, with `ask_user_choice`:
-- Article: Heavy Summary, Light Summary.
-- Transcript or book: Explanation, Summary. If the answer is Summary and heavy or light is still unclear, ask a second question: Heavy Summary, Light Summary.
+Article: there is no default. If the user did not name a mode, ask with `ask_user_choice` (options: Heavy Summary, Light Summary) before writing anything.
 
 ## 3. Produce the output
 
