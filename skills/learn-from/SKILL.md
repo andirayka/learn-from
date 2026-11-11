@@ -5,7 +5,7 @@ description: Turns a YouTube transcript, book, or article into study material wi
 
 # Learn From
 
-Read the attached source and produce material the user can learn from, with visuals that make the ideas easy to see. Two choices decide the output: the source type (section 1) and the mode (section 2). The visuals follow the same rules for every type (section 4).
+Read the attached source and produce material the user can learn from, with visuals that make the ideas easy to see. Two choices decide the output: the source type (section 1) and the mode (section 2). The visuals follow the rules in section 4.
 
 ## 1. Detect the source type
 
@@ -38,16 +38,16 @@ Article: there is no default. If the user did not name a mode, ask with `ask_use
 
 **Heavy Summary**: only what the reader must know.
 - One-sentence thesis.
-- Three to seven bullets, one sentence each. For a book: five to ten bullets plus one line per chapter.
+- Three to seven bullets, one sentence each. For a book: five to ten bullets plus one line per group of related chapters.
 - Articles and transcripts: aim for under 10% of the original length. Cut examples, background, and caveats unless the conclusion depends on them.
 - Visual: one overview map of the thesis and its main points (section 4).
 
 **Light Summary**: a shorter version that keeps the author's content.
-- Same order and structure as the original: the original headings for an article, the chapters for a book, the topics in order for a transcript.
-- Articles and transcripts: aim for 25–35% of the original length. Book: a few paragraphs per chapter.
+- Same order as the original: the original headings for an article, the chapters for a book, the topics for a transcript. Merge neighbouring headings, chapters, or topics that cover the same idea into one section.
+- Articles and transcripts: aim for 25–35% of the original length. Book: a few paragraphs per section.
 - Keep every piece of advice, step, number, caveat, and the examples that carry the argument. Keep the author's intent and tone; cut repetition, anecdotes that add nothing, and padding.
 - Write it as prose or the author's own list formats, not as a bullet digest.
-- Visual: an overview map plus a small sketch for each section, topic, or chapter's main concept (section 4).
+- Visual: an overview map plus a small sketch for each section's main concept (section 4).
 
 ### Explanation mode (transcripts and books)
 
@@ -55,7 +55,7 @@ Teach the source so the user ends up with its applicable knowledge, as if they h
 
 **YouTube transcript**
 1. **Topic and speaker**, one line, then the **main idea** in one or two sentences.
-2. **Key concepts**, in the order a beginner should learn them. For each: what it means in plain words, why the speaker says it matters, and the speaker's example. Add the timestamp when the transcript has one.
+2. **Key concepts**, in the order a beginner should learn them. For each: what it means in plain words, why the speaker says it matters, and the speaker's example. Add the timestamp when the transcript has one. Group topics the speaker treats as one idea; the concepts do not have to match the video's own sections.
 3. **Advice and actions** the speaker recommends.
 4. **Visuals** (section 4): an overview map, then a small sketch for each key concept.
 5. If the transcript is very long, split it into parts and teach one part per turn, ending each with "Next part" or "Go slower on X".
@@ -66,7 +66,7 @@ Drop sponsor reads, greetings, filler, and repeated points. Fix obvious auto-cap
 
 First turn:
 1. Read the whole book first, chapter by chapter, so nothing is skimmed. For a PDF or EPUB, extract it to text in a scratch folder and read it in pieces.
-2. Show a lesson plan: 4–8 lessons, each mapped to chapters, one line per lesson.
+2. Show a lesson plan: 4–8 lessons, one line per lesson. A lesson is one idea, not one chapter: group chapters that teach the same idea, and split a long chapter that carries two.
 3. Teach Lesson 1 in the same turn. Do not wait for approval of the plan.
 
 Every lesson, one per turn:
@@ -93,10 +93,3 @@ Every type and mode gets visuals. The user learns faster from a picture of the i
 - **Check before sharing**: open it at phone (360px) and desktop widths, in light and dark if the host supports it, and fix console errors or clipped text.
 - **No invented content.** A sketch shows only what the source says; if the source is vague on a detail, draw it vague or leave it out.
 - **Use the host's diagram tools** (in Amp, the `creating-views` skill) when available. If the host cannot render HTML, use a compact text diagram instead.
-
-## Rules for every type
-
-- Stay faithful to the source. Never add outside facts, and never present your own opinion as the author's.
-- Keep the author's advice as advice. Do not water it down into vague generalities.
-- Write in the language of the user's message; translate if the source is in another language.
-- End with one line: source type, mode, and anything skipped or unclear.
