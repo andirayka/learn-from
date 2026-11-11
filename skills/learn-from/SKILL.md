@@ -35,13 +35,24 @@ Drop sponsor reads, greetings, filler, and repeated points. Fix obvious auto-cap
 
 ### Book
 
-Work chapter by chapter so nothing is skimmed. If the book is too long to read in one pass, say which chapters you covered.
+The goal: the user ends up with the book's applicable knowledge, as if they had read all of it, learning a little at a time.
 
-1. **Core thesis**, three to five sentences.
-2. **Chapter by chapter**: main idea, key points, and the best example of each chapter.
-3. **Frameworks and models** the author introduces, with their steps or parts.
-4. **Takeaways**: what to do differently after reading.
-5. **Quotes worth keeping**, short and exact, with chapter.
+**First turn**
+1. Read the whole book first, chapter by chapter, so nothing is skimmed. For a PDF or EPUB, extract it to text in a scratch folder and read it in pieces.
+2. Show a lesson plan: 4–8 lessons, each mapped to chapters, one line per lesson.
+3. Teach Lesson 1 in the same turn. Do not wait for approval of the plan.
+
+**Every lesson**, one per turn:
+- **Teaching text**, about 1,000–1,400 words, written for a beginner. Plain headings, no jargon before it is explained, short exact quotes from the book with the chapter.
+- **A visual the user can play with.** Build a self-contained interactive HTML page (in Amp, a visual artifact) with toggles or clicks that show the idea changing, plus a "Lesson N of M" roadmap. One page per lesson; never overwrite an earlier lesson. Open it once at phone and desktop widths and fix console errors before sharing.
+- **Your move**: three concrete things to check in the user's own work.
+- A closing check-in: ask whether it landed, and offer "Next lesson" and "Go slower on X".
+
+**Examples**
+- Programming books: use React Native (TSX) examples from Lesson 1, even when the book uses another language. Keep the book's idea and translate its examples.
+- Other books: use everyday situations, not the book's own jargon.
+
+**When the user is confused**, do not repeat the same explanation. Use a different example, answer their exact question first, and update the lesson's visual in place.
 
 ### Article
 

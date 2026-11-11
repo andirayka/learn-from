@@ -5,7 +5,7 @@ An agent skill that turns a YouTube transcript, book, or article into study note
 | Source | Output |
 | --- | --- |
 | YouTube transcript | Main idea, key points with timestamps, advice, memorable examples |
-| Book | Core thesis, chapter-by-chapter notes, frameworks, takeaways, quotes |
+| Book | A lesson plan, then one beginner-friendly lesson at a time, each with an interactive visual. React Native examples for programming books. |
 | Article | **Heavy Summary** (thesis plus a few bullets) or **Light Summary** (a shorter version that keeps the author's advice and intent). Asks which if you don't say. |
 
 ## Install
