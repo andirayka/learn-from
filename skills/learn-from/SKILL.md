@@ -1,95 +1,50 @@
 ---
 name: learn-from
-description: Turns a YouTube transcript, book, or article into study material with simple visuals. Detects the source type; transcripts and books get Explanation or Summary mode (Summary is Heavy or Light), articles get Heavy Summary or Light Summary. Transcripts and books default to Explanation; articles ask which summary mode. Use when the user attaches or links a transcript, book, or article to learn from, or says "summarize this", "explain this", or "help me learn this".
+description: Turns a YouTube transcript, book, or article into study material with visuals, as a full explanation or as a heavy or light summary. Use when the user attaches or links a transcript, book, or article and asks to learn from it, explain it, or summarize it.
 ---
 
 # Learn From
 
-Read the attached source and produce material the user can learn from, with visuals that make the ideas easy to see. Two choices decide the output: the source type (section 1) and the mode (section 2). The visuals follow the rules in section 4.
+Turn the source into material the user can learn from, with visuals that show the ideas. The learner is a React Native developer who wants knowledge they can apply. Write for a beginner: plain words, and no jargon before it is explained.
 
-## 1. Detect the source type
+## Modes
 
-The user's own words win over detection. Otherwise:
+- **Explanation** (transcripts and books): teach the source in full, so the user ends up with its applicable knowledge as if they had consumed all of it.
+- **Heavy Summary**: only what the reader must know. A one-sentence thesis, then a few one-sentence bullets. For an article or transcript, stay under 10% of the original length. Cut examples, background, and caveats unless the conclusion depends on them.
+- **Light Summary**: a shorter version that keeps the author's content. Follow the original order, and merge neighbouring sections, chapters, or topics that cover the same idea. Keep every piece of advice, step, number, and caveat, the examples that carry the argument, and the author's tone. For an article or transcript, aim for 25–35% of the original length; for a book, a few paragraphs per section. Write prose or the author's own list formats, not a bullet digest.
 
-| Type | Signals |
-| --- | --- |
-| YouTube transcript | youtube.com or youtu.be link, `.srt`/`.vtt` file, timestamps, spoken-style text with filler words, no headings, auto-caption errors |
-| Book | PDF or EPUB, chapter structure, tens of thousands of words, the user says "book" |
-| Article | Web page link, blog post, essay, newsletter, byline and headings, a few thousand words |
+The user's words decide the mode. When they name none, a transcript or book gets Explanation and an article gets Light Summary. When they ask for a summary of a transcript or book without saying heavy or light, ask with `ask_user_choice`.
 
-If the type is unclear, ask in one line instead of guessing.
+If you cannot tell whether the source is a transcript, a book, or an article, ask in one line. For a YouTube link with no transcript attached, fetch the captions; if that fails, ask for the transcript.
 
-For a YouTube link with no transcript attached, try to fetch the captions (for example `yt-dlp --skip-download --write-auto-subs --sub-format vtt`). If that fails, ask for the transcript.
+## Explaining a transcript
 
-## 2. Pick the mode
+Teach the key concepts in the order a beginner should learn them, which need not be the video's order. For each concept, give what it means in plain words, why the speaker says it matters, and the speaker's example, with the timestamp when the transcript has one. Then list the advice and actions the speaker recommends.
 
-| Type | Modes |
-| --- | --- |
-| Article | Heavy Summary, Light Summary |
-| YouTube transcript, Book | **Explanation**, or **Summary** (Heavy Summary or Light Summary) |
+Leave out sponsor reads, greetings, filler, and repeated points. Fix obvious auto-caption mistakes silently, and mark a passage too garbled to trust as `[unclear]`. Teach a very long transcript one part per turn.
 
-Transcript or book: **Explanation is the default.** Unless the user asks for a summary ("summarize", "TL;DR", "heavy", "light", "short version"), explain the source in full, without squeezing it, and do not ask. If they ask for a summary but do not say heavy or light, ask with `ask_user_choice` (options: Heavy Summary, Light Summary).
+## Explaining a book
 
-Article: there is no default. If the user did not name a mode, ask with `ask_user_choice` (options: Heavy Summary, Light Summary) before writing anything.
+Teach the book as lessons, one per turn.
 
-## 3. Produce the output
+In the first turn, read the whole book, then show a plan of 4–8 lessons with one line each. A lesson is one idea, not one chapter: group chapters that teach the same idea, and split a chapter that carries two. Teach Lesson 1 in that same turn without waiting for approval of the plan.
 
-### Summary modes (all types)
+Each lesson has:
 
-**Heavy Summary**: only what the reader must know.
-- One-sentence thesis.
-- Three to seven bullets, one sentence each. For a book: five to ten bullets plus one line per group of related chapters.
-- Articles and transcripts: aim for under 10% of the original length. Cut examples, background, and caveats unless the conclusion depends on them.
-- Visual: one overview map of the thesis and its main points (section 4).
+- Teaching text of about 1,000–1,400 words, with short exact quotes from the book and their chapter.
+- An interactive visual where toggles or clicks show the idea changing, with a "Lesson N of M" roadmap. Give each lesson its own page, so earlier lessons stay available.
+- "Your move": three concrete things to check in the user's own work.
+- A closing question asking whether the lesson landed, offering the next lesson or a slower pass on one part.
 
-**Light Summary**: a shorter version that keeps the author's content.
-- Same order as the original: the original headings for an article, the chapters for a book, the topics for a transcript. Merge neighbouring headings, chapters, or topics that cover the same idea into one section.
-- Articles and transcripts: aim for 25–35% of the original length. Book: a few paragraphs per section.
-- Keep every piece of advice, step, number, caveat, and the examples that carry the argument. Keep the author's intent and tone; cut repetition, anecdotes that add nothing, and padding.
-- Write it as prose or the author's own list formats, not as a bullet digest.
-- Visual: an overview map plus a small sketch for each section's main concept (section 4).
+For a programming book, write the examples in React Native (TSX) from Lesson 1, even when the book uses another language: keep the book's idea and translate its example. For other books, use everyday situations instead of the book's jargon.
 
-### Explanation mode (transcripts and books)
+When the user is confused, answer their exact question first, explain with a different example instead of repeating the first one, and update that lesson's visual in place.
 
-Teach the source so the user ends up with its applicable knowledge, as if they had consumed all of it. Write for a beginner: plain headings, no jargon before it is explained.
+## Visuals
 
-**YouTube transcript**
-1. **Topic and speaker**, one line, then the **main idea** in one or two sentences.
-2. **Key concepts**, in the order a beginner should learn them. For each: what it means in plain words, why the speaker says it matters, and the speaker's example. Add the timestamp when the transcript has one. Group topics the speaker treats as one idea; the concepts do not have to match the video's own sections.
-3. **Advice and actions** the speaker recommends.
-4. **Visuals** (section 4): an overview map, then a small sketch for each key concept.
-5. If the transcript is very long, split it into parts and teach one part per turn, ending each with "Next part" or "Go slower on X".
+Every mode gets visuals, because the user learns faster from a picture of an idea than from a paragraph about it.
 
-Drop sponsor reads, greetings, filler, and repeated points. Fix obvious auto-caption mistakes silently; if a passage is too garbled to trust, mark it `[unclear]`.
-
-**Book**: learn a little at a time.
-
-First turn:
-1. Read the whole book first, chapter by chapter, so nothing is skimmed. For a PDF or EPUB, extract it to text in a scratch folder and read it in pieces.
-2. Show a lesson plan: 4–8 lessons, one line per lesson. A lesson is one idea, not one chapter: group chapters that teach the same idea, and split a long chapter that carries two.
-3. Teach Lesson 1 in the same turn. Do not wait for approval of the plan.
-
-Every lesson, one per turn:
-- **Teaching text**, about 1,000–1,400 words. Short exact quotes from the book with the chapter.
-- **A visual the user can play with** (section 4). Make it interactive, with toggles or clicks that show the idea changing, plus a "Lesson N of M" roadmap. One page per lesson; never overwrite an earlier lesson.
-- **Your move**: three concrete things to check in the user's own work.
-- A closing check-in: ask whether it landed, and offer "Next lesson" and "Go slower on X".
-
-Examples:
-- Programming books: use React Native (TSX) examples from Lesson 1, even when the book uses another language. Keep the book's idea and translate its examples.
-- Other books: use everyday situations, not the book's own jargon.
-
-When the user is confused, do not repeat the same explanation. Use a different example, answer their exact question first, and update the lesson's visual in place.
-
-## 4. Visuals
-
-Every type and mode gets visuals. The user learns faster from a picture of the idea than from a paragraph about it.
-
-- **Overview map first.** One picture of how the source's ideas connect: a loop, a sequence, a hierarchy, or a before/after. For a transcript or a long article, add the suggested study order.
-- **How many sketches** depends on the mode: Heavy Summary gets the overview map only; Light Summary and transcript Explanation get one sketch per section or key concept; book Explanation gets one lab per lesson. Each sketch shows one idea: a comparison, a flow, a fan-out, a loop, a count. Add one or two lines of text beside it, not a paragraph.
-- **Static by default.** Make it interactive only when toggling shows the idea better, such as "with this design vs without". Book lessons use interactive labs; everything else usually does not need them.
-- **Keep it simple and calm.** Mostly gray, one accent color on the thing the diagram is about, small readable text, no boxes around prose. Rows of "text on the left, sketch on the right" that stack on narrow screens work well.
-- **Build** each page as a self-contained HTML file with inline SVG (in Amp, a visual artifact, embedded in the reply). Group by reading order, about three to five concepts per page, so no page gets long.
-- **Check before sharing**: open it at phone (360px) and desktop widths, in light and dark if the host supports it, and fix console errors or clipped text.
-- **No invented content.** A sketch shows only what the source says; if the source is vague on a detail, draw it vague or leave it out.
-- **Use the host's diagram tools** (in Amp, the `creating-views` skill) when available. If the host cannot render HTML, use a compact text diagram instead.
+- Start with one overview map of how the source's ideas connect. Heavy Summary gets only this map.
+- Light Summary and transcript Explanation add one small sketch per section or key concept. Each sketch shows one idea, with a line or two of text beside it.
+- Draw only what the source says. Where the source is vague on a detail, draw it vague or leave it out.
+- Build visuals with the host's own tools (in Amp, the `creating-artifacts` skill). If the host cannot render HTML, use a compact text diagram.
