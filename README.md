@@ -20,4 +20,6 @@ npx skills add andirayka/learn-from
 
 ## Use
 
+For a YouTube video, paste the link: the skill fetches the captions itself with `yt-dlp` (installing it if needed), so you don't have to copy the transcript. Videos without captions, or with blocked ones (private, members-only, age-restricted), fall back to asking for the transcript.
+
 Attach a source and say what you want, for example "learn from this" or "heavy summary of this article".

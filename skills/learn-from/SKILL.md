@@ -15,7 +15,33 @@ Turn the source into material the user can learn from, with visuals that show th
 
 The user's words decide the mode. When they name none, a transcript or book gets Explanation and an article gets Light Summary. When they ask for a summary of a transcript or book without saying heavy or light, ask with `ask_user_choice`.
 
-If you cannot tell whether the source is a transcript, a book, or an article, ask in one line. For a YouTube link with no transcript attached, fetch the captions; if that fails, ask for the transcript.
+If you cannot tell whether the source is a transcript, a book, or an article, ask in one line. A YouTube link counts as a transcript source: get the transcript yourself, as below, and do not ask the user for it unless that fails.
+
+## Getting a transcript from a YouTube link
+
+Use the video's own captions (creator subtitles, else auto-generated), through `yt-dlp`. If `yt-dlp` is missing, install it (`brew install yt-dlp`). Work in a fresh temp directory and delete it afterwards.
+
+```sh
+yt-dlp --extractor-args youtube:player_client=android_vr --skip-download \
+  --write-subs --write-auto-subs --sub-langs "en,en-orig" --sub-format json3 \
+  -o "%(id)s" "<url>"
+```
+
+- Name the languages exactly. A pattern like `en.*` also requests every translation and gets rate-limited (HTTP 429). For a video not in English, use its language code.
+- The default clients often return no captions ("PO token" warning) or "page needs to be reloaded". The `android_vr` client avoids this. If it fails, retry with `player_client=tv`, or wait and retry after a 429.
+- You may get both `<id>.en.json3` and `<id>.en-orig.json3`; either is fine. Turn the json3 into text lines with timestamps:
+
+```sh
+python3 -I -c '
+import json, sys
+for e in json.load(open(sys.argv[1]))["events"]:
+    t = "".join(s.get("utf8", "") for s in e.get("segs", [])).replace("\n", " ").strip()
+    ms = e["tStartMs"]
+    if t: print("[%d:%02d] %s" % (ms // 60000, ms // 1000 % 60, t))
+' <id>.en.json3
+```
+
+If the video has no captions, or they are blocked (private, members-only, age-restricted), say so and ask the user for the transcript. Do not guess the content from the title.
 
 ## Explaining a transcript
 
