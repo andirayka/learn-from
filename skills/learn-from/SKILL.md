@@ -7,6 +7,8 @@ description: Turns a YouTube transcript, book, or article into study material wi
 
 Turn the source into material the user can learn from, with visuals that show the ideas. The learner is a React Native developer who wants knowledge they can apply. Write for a beginner: plain words, and no jargon before it is explained.
 
+Write in the language the user writes in, and keep quotes in the source's language. Quote the source only word for word: search the source text for each quote before using it, and paraphrase without quotation marks when the search does not find it.
+
 ## Modes
 
 - **Explanation** (transcripts and books): teach the source in full, so the user ends up with its applicable knowledge as if they had consumed all of it.
@@ -31,7 +33,7 @@ If the script still exits without captions (none exist, or the video is private,
 
 ## Explaining a transcript
 
-Teach the key concepts in the order a beginner should learn them, which need not be the video's order. For each concept, give what it means in plain words, why the speaker says it matters, and the speaker's example, with the timestamp when the transcript has one. Then list the advice and actions the speaker recommends. The explanation is done when every piece of advice, step, and number in the transcript appears in it.
+Teach the key concepts in the order a beginner should learn them, which need not be the video's order. For each concept, give what it means in plain words, why the speaker says it matters, and the speaker's example, with the timestamp when the transcript has one. Then list the advice and actions the speaker recommends. The explanation is done when every piece of advice, step, and number in the transcript appears in it. End the turn with the practice block below.
 
 Leave out sponsor reads, greetings, filler, and repeated points. Fix obvious auto-caption mistakes silently, and mark a passage too garbled to trust as `[unclear]`. Teach a very long transcript one part per turn.
 
@@ -39,18 +41,35 @@ Leave out sponsor reads, greetings, filler, and repeated points. Fix obvious aut
 
 Teach the book as lessons, one per turn.
 
+A book takes many turns, often across several threads, so keep the course on disk in `~/.learn-from/<book-slug>/`:
+
+- `chapters/`: the book's text, one file per chapter, written once when you first read the book.
+- `course.md`: the path of the source file, the lesson plan with the chapters each lesson covers, which lessons are taught and where their pages are, and the ideas the user got wrong or skipped in "Check yourself".
+
+Before anything else, look for the book's `course.md`. If it exists, do not reread the book or plan again: read `course.md` and the chapter files of the next lesson, and continue from there. Update `course.md` after each lesson and after each set of answers from the user.
+
 In the first turn, read the whole book, then show a plan of 4–8 lessons with one line each and the chapters each lesson covers. A lesson is one idea, not one chapter: group chapters that teach the same idea, and split a chapter that carries two. Every chapter belongs to a lesson. Teach Lesson 1 in that same turn without waiting for approval of the plan.
 
 Each lesson has:
 
 - Teaching text of about 1,000–1,400 words, with short exact quotes from the book and their chapter.
 - An interactive visual where toggles or clicks show the idea changing, with a "Lesson N of M" roadmap. Give each lesson its own page, so earlier lessons stay available.
-- "Your move": three concrete things to check in the user's own work.
-- A closing question asking whether the lesson landed, offering the next lesson or a slower pass on one part.
+- The practice block below.
+
+Open every lesson after the first with two questions on earlier lessons, chosen from the ideas `course.md` lists as wrong or skipped, or from the previous lesson when it lists none.
 
 For a programming book, write the examples in React Native (TSX) from Lesson 1, even when the book uses another language: keep the book's idea and translate its example. For other books, use everyday situations instead of the book's jargon.
 
 When the user is confused, answer their exact question first, explain with a different example instead of repeating the first one, and update that lesson's visual in place.
+
+## Practice block
+
+End every Explanation turn (a book lesson, or a transcript or one part of it) with these two, in this order:
+
+- **Your move**: three concrete things to check or try in the user's own work.
+- **Check yourself**: two or three questions the user answers from memory, without the answers shown. Each question asks them to use an idea from this turn on a new case, not to repeat a definition.
+
+Answering from memory is what makes the material stick, and the answers show which part to teach again, so do not replace the questions with "did this make sense?". When the user answers, say what was right, correct what was wrong with a different example from the one in the lesson, then offer the next lesson or part. When the user asks to move on without answering, move on, and treat those questions as skipped.
 
 ## Visuals
 

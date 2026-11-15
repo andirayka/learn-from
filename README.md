@@ -10,6 +10,8 @@ An agent skill that turns a YouTube transcript, book, or article into study note
 
 Transcripts and books are explained in full unless you ask for a summary. Articles get a Light Summary unless you ask for a heavy one.
 
+Every explanation ends with things to try in your own work and two or three questions to answer from memory; the agent corrects your answers before moving on. A book course is saved in `~/.learn-from/<book>/` (chapter text, lesson plan, progress, and the ideas you missed), so "continue the book" works from a new thread without rereading it, and each lesson opens with a quick review of what you missed.
+
 Every type gets visuals: an overview map of how the ideas connect, and a small sketch per key concept. Book lessons use interactive visuals.
 
 ## Install
