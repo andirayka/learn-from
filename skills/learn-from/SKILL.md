@@ -1,6 +1,6 @@
 ---
 name: learn-from
-description: Turns a YouTube transcript, book, or article into study material with visuals, as a full explanation or as a heavy or light summary. Use when the user attaches or links a transcript, book, or article and asks to learn from it, explain it, or summarize it.
+description: Turns a YouTube transcript, book, or article into study material with visuals, as a full explanation or as a heavy or light summary. Use when the user gives a YouTube link, transcript, book, or article and asks to learn from it, explain it, or summarize it.
 ---
 
 # Learn From
@@ -19,33 +19,19 @@ If you cannot tell whether the source is a transcript, a book, or an article, as
 
 ## Getting a transcript from a YouTube link
 
-Use the video's own captions (creator subtitles, else auto-generated), through `yt-dlp`. If `yt-dlp` is missing, install it (`brew install yt-dlp`). Work in a fresh temp directory and delete it afterwards.
+Run the script in this skill's folder. It prints the video's own captions (creator subtitles, else auto-generated) as `[m:ss] text` lines:
 
 ```sh
-yt-dlp --extractor-args youtube:player_client=android_vr --skip-download \
-  --write-subs --write-auto-subs --sub-langs "en,en-orig" --sub-format json3 \
-  -o "%(id)s" "<url>"
+scripts/youtube-transcript.sh "<url>" [language-code]
 ```
 
-- Name the languages exactly. A pattern like `en.*` also requests every translation and gets rate-limited (HTTP 429). For a video not in English, use its language code.
-- The default clients often return no captions ("PO token" warning) or "page needs to be reloaded". The `android_vr` client avoids this. If it fails, retry with `player_client=tv`, or wait and retry after a 429.
-- You may get both `<id>.en.json3` and `<id>.en-orig.json3`; either is fine. Turn the json3 into text lines with timestamps:
+The language defaults to `en`; for a video in another language, pass its code. If `yt-dlp` is missing, install it (`brew install yt-dlp`) and run again. If the error mentions HTTP 429, wait a minute and run again.
 
-```sh
-python3 -I -c '
-import json, sys
-for e in json.load(open(sys.argv[1]))["events"]:
-    t = "".join(s.get("utf8", "") for s in e.get("segs", [])).replace("\n", " ").strip()
-    ms = e["tStartMs"]
-    if t: print("[%d:%02d] %s" % (ms // 60000, ms // 1000 % 60, t))
-' <id>.en.json3
-```
-
-If the video has no captions, or they are blocked (private, members-only, age-restricted), say so and ask the user for the transcript. Do not guess the content from the title.
+If the script still exits without captions (none exist, or the video is private, members-only, or age-restricted), say so and ask the user for the transcript. Teach only from a transcript, never from the title.
 
 ## Explaining a transcript
 
-Teach the key concepts in the order a beginner should learn them, which need not be the video's order. For each concept, give what it means in plain words, why the speaker says it matters, and the speaker's example, with the timestamp when the transcript has one. Then list the advice and actions the speaker recommends.
+Teach the key concepts in the order a beginner should learn them, which need not be the video's order. For each concept, give what it means in plain words, why the speaker says it matters, and the speaker's example, with the timestamp when the transcript has one. Then list the advice and actions the speaker recommends. The explanation is done when every piece of advice, step, and number in the transcript appears in it.
 
 Leave out sponsor reads, greetings, filler, and repeated points. Fix obvious auto-caption mistakes silently, and mark a passage too garbled to trust as `[unclear]`. Teach a very long transcript one part per turn.
 
@@ -53,7 +39,7 @@ Leave out sponsor reads, greetings, filler, and repeated points. Fix obvious aut
 
 Teach the book as lessons, one per turn.
 
-In the first turn, read the whole book, then show a plan of 4–8 lessons with one line each. A lesson is one idea, not one chapter: group chapters that teach the same idea, and split a chapter that carries two. Teach Lesson 1 in that same turn without waiting for approval of the plan.
+In the first turn, read the whole book, then show a plan of 4–8 lessons with one line each and the chapters each lesson covers. A lesson is one idea, not one chapter: group chapters that teach the same idea, and split a chapter that carries two. Every chapter belongs to a lesson. Teach Lesson 1 in that same turn without waiting for approval of the plan.
 
 Each lesson has:
 
